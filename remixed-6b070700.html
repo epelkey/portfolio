@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The work behind the words</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-background-primary: #F6F5F2;
+    --color-surface: #FFFFFF;
+    --color-text-primary: #211D18;
+    --color-text-secondary: #4A453D;
+    --color-text-tertiary: #8C8579;
+    --color-border-secondary: #DAD5CC;
+    --color-border-tertiary: #E8E4DB;
+    --border-radius-md: 7px;
+    --font-sans: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  .page {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 56px 32px 80px;
+  }
+
+  header { margin-bottom: 28px; }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin: 0 0 14px;
+    font-weight: 500;
+  }
+
+  .header-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .header-top .eyebrow { margin: 0; }
+  .portfolio-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 13px; font-weight: 500;
+    color: var(--color-text-secondary); text-decoration: none;
+    border: 1px solid var(--color-border-secondary);
+    padding: 6px 12px; border-radius: var(--border-radius-md);
+    background: var(--color-surface); white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .portfolio-link:hover { border-color: var(--color-text-tertiary); color: var(--color-text-primary); }
+  .portfolio-link svg { width: 13px; height: 13px; }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(28px, 4.5vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0;
+    max-width: 18ch;
+  }
+
+  .lede {
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    max-width: 62ch;
+    margin: 0 0 24px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--color-border-secondary);
+  }
+  .tab {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 9px 2px;
+    margin-right: 26px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab:hover { color: var(--color-text-secondary); }
+  .tab.active {
+    color: var(--color-text-primary);
+    border-bottom-color: var(--color-text-primary);
+  }
+
+  .view[hidden] { display: none; }
+
+  .rule {
+    height: 1px;
+    background: var(--color-border-secondary);
+    border: 0;
+    margin: 32px 0 24px;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  #legend { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .legend-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--color-border-secondary);
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+  }
+  .legend-btn:hover { opacity: 1 !important; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    padding: 7px 13px;
+    border: 1px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { border-color: var(--color-text-tertiary); }
+  .btn svg { width: 15px; height: 15px; }
+
+  .table-scroll { overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    min-width: 920px;
+    table-layout: fixed;
+  }
+
+  thead th.corner {
+    width: 132px;
+    position: sticky;
+    left: 0;
+    background: var(--color-background-primary);
+    z-index: 2;
+  }
+
+  thead th.stage {
+    padding: 10px 8px;
+    text-align: left;
+    vertical-align: bottom;
+    border-bottom: 1px solid var(--color-border-secondary);
+  }
+  .stage-num { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 3px; font-variant-numeric: tabular-nums; }
+  .stage-name { font-size: 14px; font-weight: 600; color: var(--color-text-primary); }
+
+  td.rowhead {
+    position: sticky;
+    left: 0;
+    background: var(--color-background-primary);
+    z-index: 1;
+    padding: 13px 12px 13px 0;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-border-tertiary);
+  }
+  .dim-label { font-size: 14px; font-weight: 600; color: var(--color-text-primary); }
+  .dim-hint { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  td.cell {
+    padding: 8px 6px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-border-tertiary);
+    border-left: 1px solid var(--color-border-tertiary);
+  }
+
+  .empty-dash { font-size: 11px; color: var(--color-text-tertiary); font-style: italic; }
+
+  .exp-box { border-radius: var(--border-radius-md); margin-bottom: 5px; cursor: pointer; }
+  .exp-box:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 1px; }
+  .exp-row { display: flex; align-items: flex-start; gap: 6px; padding: 6px 8px; }
+  .exp-summary { font-size: 12px; font-weight: 500; line-height: 1.4; flex: 1; }
+  .exp-chevron { flex-shrink: 0; margin-top: 2px; transition: transform 0.18s ease; }
+  .exp-desc { display: none; padding: 0 8px 7px 8px; font-size: 11px; opacity: 0.85; line-height: 1.42; }
+
+  .ghost-box { background: transparent; border: 1px dashed; border-radius: var(--border-radius-md); padding: 6px 8px; margin-bottom: 5px; }
+  .ghost-row { display: flex; align-items: center; gap: 6px; }
+  .ghost-icon { flex-shrink: 0; }
+  .ghost-text { font-size: 12px; font-weight: 400; line-height: 1.4; }
+
+  .chip-group { margin-bottom: 7px; }
+  .chip { display: inline-block; font-size: 11px; font-weight: 400; padding: 2px 9px; border-radius: 100px; margin: 0 4px 4px 0; line-height: 1.5; }
+
+  .q-box { border-left: 2px solid; padding: 1px 0 1px 9px; margin-bottom: 9px; }
+  .q-text { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 13px; line-height: 1.45; }
+
+  #deliv-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+
+  .deliv-stat {
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+    margin: 0 0 30px;
+  }
+  .deliv-stat b { color: var(--color-text-secondary); font-weight: 600; }
+
+  .timeline { position: relative; }
+
+  .tl-node { display: flex; gap: 20px; padding-bottom: 34px; }
+
+  .tl-rail {
+    position: relative;
+    flex-shrink: 0;
+    width: 16px;
+    display: flex;
+    justify-content: center;
+  }
+  .tl-rail::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: -34px;
+    width: 2px;
+    background: var(--accent-soft);
+  }
+  .tl-node:last-child .tl-rail::before { display: none; }
+  .tl-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 3px solid var(--accent);
+    margin-top: 4px;
+    z-index: 1;
+  }
+
+  .tl-content { flex: 1; min-width: 0; }
+
+  .tl-stage { display: flex; align-items: baseline; gap: 9px; margin-bottom: 14px; }
+  .tl-stage-num { font-size: 12px; color: var(--color-text-tertiary); font-variant-numeric: tabular-nums; }
+  .tl-stage-name {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 1;
+    color: var(--color-text-primary);
+  }
+
+  .tl-micro {
+    display: block;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .tl-question {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.4;
+    color: var(--accent);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  .tl-connector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-text-tertiary);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    margin: 12px 0 12px;
+  }
+  .tl-connector svg { width: 15px; height: 15px; }
+
+  .deliverable-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 13px 15px;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 9px;
+    border: 1px solid var(--accent-soft);
+    max-width: 60ch;
+  }
+  .dc-icon { flex-shrink: 0; margin-top: 1px; }
+  .dc-title { font-size: 14.5px; font-weight: 600; line-height: 1.3; }
+  .dc-desc { font-size: 12.5px; color: var(--color-text-secondary); margin-top: 3px; line-height: 1.42; }
+
+  .deliv-charthint { font-size: 12px; color: var(--color-text-tertiary); line-height: 1.45; max-width: 70ch; margin: 0 0 22px; }
+  .deliv-chartrow { display: flex; gap: 34px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 10px; }
+  .deliv-chart-wrap { flex-shrink: 0; width: 300px; }
+  .deliv-chart { position: relative; width: 300px; height: 300px; }
+  #deliv-chart-svg { width: 100%; height: 100%; display: block; }
+  .chart-center {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%; text-align: center; pointer-events: none;
+  }
+  .cc-num { font-family: var(--font-serif); font-size: 34px; line-height: 1; font-weight: 500; }
+  .cc-label { font-size: 10.5px; color: var(--color-text-tertiary); margin-top: 6px; line-height: 1.25; }
+  .chart-caption {
+    margin-top: 12px; text-align: center;
+    font-size: 11.5px; line-height: 1.4; color: var(--color-text-secondary);
+    min-height: 34px; width: 300px;
+  }
+  .chart-caption b { font-weight: 600; color: var(--color-text-primary); }
+  .chart-caption .cap-disc { display: block; font-size: 10px; font-weight: 600; margin-top: 2px; }
+  .deliv-legend {
+    flex: 1; min-width: 240px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(208px, 1fr));
+    gap: 18px 24px; align-content: start;
+  }
+  .leg-group-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 7px;
+  }
+  .leg-group-title .leg-dot { margin-top: 0; }
+  .leg-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; line-height: 1.35;
+    padding: 3px 6px; border-radius: 5px; cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: background 0.12s, opacity 0.12s, color 0.12s;
+  }
+  .leg-dot { width: 9px; height: 9px; border-radius: 2px; margin-top: 4px; flex-shrink: 0; }
+  .leg-item.dim { opacity: 0.4; }
+  .leg-item.hot { background: var(--color-border-tertiary); color: var(--color-text-primary); }
+  @media (max-width: 760px) {
+    .deliv-chart-wrap { align-self: center; }
+  }
+
+  #skill-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+  .skill-stat {
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+    margin: 0 0 26px;
+    max-width: 72ch;
+  }
+  .skill-stat b { color: var(--color-text-secondary); font-weight: 600; }
+
+  .skill-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  @media (max-width: 760px) { .skill-panels { grid-template-columns: 1fr; } }
+
+  .skill-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-tertiary);
+    border-radius: 10px;
+    padding: 22px 22px 8px;
+  }
+  .sp-head { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .sp-icon {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .sp-icon svg { width: 19px; height: 19px; }
+  .sp-title { font-family: var(--font-serif); font-weight: 500; font-size: 20px; line-height: 1.05; }
+  .sp-count { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .sp-blurb { font-size: 12.5px; color: var(--color-text-secondary); margin: 14px 0 18px; line-height: 1.45; }
+
+  .cluster { margin-bottom: 18px; }
+  .cluster-label {
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--color-text-tertiary); font-weight: 600;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 9px;
+  }
+  .cluster-label::after { content: ""; flex: 1; height: 1px; background: var(--color-border-tertiary); }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+
+  .skill-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 5px 11px;
+    border-radius: 100px;
+    border: 1px solid var(--color-border-secondary);
+    background: var(--color-surface);
+    font-size: 12.5px; color: var(--color-text-secondary);
+    transition: opacity 0.18s, background 0.18s, border-color 0.18s, color 0.18s;
+  }
+  .skill-chip .dots { display: inline-flex; gap: 3px; }
+  .skill-chip .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .skill-chip.dim { opacity: 0.24; }
+
+  /* ---- Matrix AI marker ---- */
+  .ai-key {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; color: var(--color-text-tertiary);
+    margin-bottom: 16px;
+  }
+  .ai-key-icon { display: inline-flex; color: #6A5FC0; }
+  .ai-key-icon svg { width: 14px; height: 14px; }
+  .ai-cellwrap { position: relative; padding-right: 17px; }
+  .ai-corner {
+    position: absolute; top: 3px; right: -3px;
+    display: inline-flex; line-height: 0;
+    padding: 2px; background: transparent; border: none;
+    cursor: pointer; opacity: 0.62; transition: opacity 0.15s;
+  }
+  .ai-corner:hover { opacity: 1; }
+  .ai-corner svg { width: 13px; height: 13px; }
+
+  /* ---- AI view ---- */
+  #ai-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+
+  .ai-focus {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.45;
+    margin: 0 0 24px;
+    max-width: 66ch;
+  }
+
+  .ai-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 14px;
+  }
+
+  .ai-card {
+    border: 1px solid var(--color-border-tertiary);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+  }
+  .ai-card-ai { padding: 15px 17px 15px; flex: 1; }
+  .ai-card-human { padding: 13px 17px 15px; }
+  .ai-mini {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px; letter-spacing: 0.11em; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 8px;
+  }
+  .ai-mini svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .ai-text { font-size: 13px; line-height: 1.46; color: var(--color-text-secondary); }
+
+  .ai-frontier {
+    margin-top: 38px;
+    border: 1px solid var(--color-border-secondary);
+    border-radius: 12px;
+    padding: 30px 32px 32px;
+    background:
+      radial-gradient(120% 130% at 100% 0%, #EFEAF7 0%, rgba(239,234,247,0) 55%),
+      var(--color-surface);
+  }
+  .frontier-eyebrow {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase;
+    font-weight: 600; color: #6A5FC0; margin-bottom: 13px;
+  }
+  .frontier-eyebrow svg { width: 14px; height: 14px; }
+  .frontier-title {
+    font-family: var(--font-serif); font-weight: 500;
+    font-size: clamp(20px, 3vw, 27px); line-height: 1.12;
+    letter-spacing: -0.01em; margin: 0 0 14px; max-width: 24ch;
+  }
+  .frontier-intro {
+    font-size: 14px; line-height: 1.55; color: var(--color-text-secondary);
+    max-width: 70ch; margin: 0 0 12px;
+  }
+  .frontier-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+    gap: 13px;
+    margin-top: 22px;
+  }
+  .frontier-item {
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border-tertiary);
+    border-radius: 9px;
+    padding: 16px 17px;
+  }
+  .fi-title { font-size: 14px; font-weight: 600; line-height: 1.3; margin-bottom: 6px; color: var(--color-text-primary); }
+  .fi-text { font-size: 12px; line-height: 1.48; color: var(--color-text-secondary); }
+  .fi-from { margin-top: 10px; font-size: 11px; line-height: 1.4; color: var(--color-text-tertiary); }
+  .fi-from b { color: var(--color-text-secondary); font-weight: 600; }
+  .frontier-close {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 15px; line-height: 1.5; color: var(--color-text-primary);
+    margin: 24px 0 0; max-width: 64ch;
+  }
+
+  footer {
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+    max-width: 70ch;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border-secondary);
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    text-align: center;
+  }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+  .reveal { opacity: 0; animation: riseIn 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+  .reveal.d1 { animation-delay: 0.04s; }
+  .reveal.d2 { animation-delay: 0.12s; }
+  .reveal.d3 { animation-delay: 0.20s; }
+  .reveal.d4 { animation-delay: 0.28s; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { animation: none; opacity: 1; }
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 40px 18px 64px; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .btn { align-self: flex-end; }
+    .tl-question { font-size: 16px; }
+    .ai-frontier { padding: 24px 20px 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="header-top reveal d1">
+      <p class="eyebrow">Technical content disciplines</p>
+      <a class="portfolio-link" href="https://erinlynnpelkey.com" target="_blank" rel="noopener noreferrer">Portfolio <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17l9 -9"/><path d="M8 8h8v8"/></svg></a>
+    </div>
+    <h1 class="reveal d1">The work behind the words</h1>
+    <p class="lede reveal d2" style="margin-top:16px;margin-bottom:0">How technical content disciplines span the product development lifecycle: what they deliver, the skills they draw on, and how the work evolves with AI.</p>
+  </header>
+
+  <nav class="tabs reveal d2" role="tablist">
+    <button class="tab active" data-view="matrix" role="tab" aria-selected="true" onclick="switchView('matrix')">Lifecycle matrix</button>
+    <button class="tab" data-view="deliverables" role="tab" aria-selected="false" onclick="switchView('deliverables')">Deliverables</button>
+    <button class="tab" data-view="skills" role="tab" aria-selected="false" onclick="switchView('skills')">Skills</button>
+    <button class="tab" data-view="ai" role="tab" aria-selected="false" onclick="switchView('ai')">Working with AI</button>
+  </nav>
+
+  <!-- ============ MATRIX VIEW ============ -->
+  <section id="view-matrix" class="view" role="tabpanel">
+    <p class="lede reveal d2">Five content disciplines, mapped stage by stage from discovery to delivery. Each cell shows a summary; expand any card to read the detail, or toggle disciplines in the legend to compare their paths.</p>
+
+    <hr class="rule reveal d2">
+
+    <div class="controls reveal d3">
+      <div id="legend"></div>
+      <button id="toggleAll" class="btn" onclick="toggleAll()" aria-label="Expand or collapse all detail"></button>
+    </div>
+
+    <div class="ai-key reveal d3"><span class="ai-key-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6 5.6 1.9 -5.6 1.9 -1.9 5.6 -1.9 -5.6 -5.6 -1.9 5.6 -1.9z"/><path d="M19 4v3"/><path d="M20.5 5.5h-3"/></svg></span> Spark marks activities AI can assist; select one to open the Working with AI tab.</div>
+
+    <div class="table-scroll reveal d4">
+      <table>
+        <thead id="matrix-head"></thead>
+        <tbody id="matrix-body"></tbody>
+      </table>
+    </div>
+
+    <footer>
+      Activities, outputs, and value are collapsible cards &mdash; click any to reveal its detail. Skills appear as capability tags; key questions capture the mindset at each stage. The dashed box marks ongoing work that carries across stages. A spark badge flags activities where AI can assist; select it to open the Working with AI tab.
+    </footer>
+  </section>
+
+  <!-- ============ DELIVERABLES VIEW ============ -->
+  <section id="view-deliverables" class="view" role="tabpanel" hidden>
+    <p class="lede">Every role produces tangible deliverables, the development of which are driven by guiding questions that help ensure the accuracy, completeness, helpfulness, and relatability of the content being delivered.<br><br>Select a content dimension to view the associated deliverables and the critical questions that guide their development.</p>
+
+    <div id="deliv-pills"></div>
+    <p class="deliv-stat" id="deliv-stat"></p>
+    <p class="deliv-charthint">The ring shows every specific deliverable across all disciplines, grouped by color. Hover a slice or a name to highlight it, or select one to focus the timeline below.</p>
+    <div class="deliv-chartrow">
+      <div class="deliv-chart-wrap">
+        <div class="deliv-chart" id="deliv-chart">
+          <svg id="deliv-chart-svg" viewBox="0 0 200 200" aria-label="Deliverables by discipline"></svg>
+          <div class="chart-center" id="chart-center"></div>
+        </div>
+        <div class="chart-caption" id="chart-caption"></div>
+      </div>
+      <div class="deliv-legend" id="deliv-legend"></div>
+    </div>
+
+    <div class="timeline" id="deliv-timeline"></div>
+  </section>
+
+  <!-- ============ SKILLS VIEW ============ -->
+  <section id="view-skills" class="view" role="tabpanel" hidden>
+    <p class="lede">The practice runs on two kinds of capability: the teachable, technical <em>hard skills</em> the craft is built on, and the human and cognitive <em>soft skills</em> that align, question, and carry the work across teams.</p>
+
+    <div id="skill-filter"></div>
+    <p class="skill-stat" id="skill-stat"></p>
+
+    <div class="skill-panels" id="skill-panels"></div>
+  </section>
+
+  <!-- ============ AI VIEW ============ -->
+  <section id="view-ai" class="view" role="tabpanel" hidden>
+    <p class="lede">Across every role, AI is becoming a partner in the work. It's fastest where it accelerates research, drafting, review, and maintenance, and most valuable when paired with the practitioner's judgment about what users actually need. Each use below shows what AI accelerates and what stays a human call.</p>
+
+    <div id="ai-pills"></div>
+    <p class="ai-focus" id="ai-focus"></p>
+
+    <div class="ai-grid" id="ai-cards"></div>
+
+    <div class="ai-frontier" id="ai-frontier"></div>
+  </section>
+
+  <p class="page-footer">&copy; 2026 Erin Stuppiello (n&eacute;e Erin Pelkey). All rights reserved.</p>
+</div>
+
+<script>
+const stages = ["Discovery", "Planning", "Design", "Development", "Testing", "Delivery"];
+const dimensions = [
+  { key: "activities", label: "Activities", hint: "What they do" },
+  { key: "outputs", label: "Outputs", hint: "What they produce" },
+  { key: "value", label: "Value", hint: "Why it matters" },
+  { key: "skills", label: "Key skills", hint: "Capabilities used" },
+  { key: "questions", label: "Key questions", hint: "What's on their mind" }
+];
+const disciplines = [
+  { key: "strategy", label: "Content strategy & design", hex: "#534AB7", fill: "#EEEDFE", text: "#3C3489", sub: "#534AB7" },
+  { key: "uxwriting", label: "UI/UX writing", hex: "#0F6E56", fill: "#E1F5EE", text: "#085041", sub: "#0F6E56" },
+  { key: "docs", label: "Documentation development", hex: "#993C1D", fill: "#FAECE7", text: "#712B13", sub: "#993C1D" },
+  { key: "apidocs", label: "API documentation", hex: "#185FA5", fill: "#E6F1FB", text: "#0C447C", sub: "#185FA5" },
+  { key: "contentops", label: "Content operations", hex: "#993556", fill: "#FBEAF0", text: "#72243E", sub: "#993556" }
+];
+
+const content = {
+  strategy: {
+    activities: {
+      Discovery: [
+        ["Learn user objectives and pain points", "Interview stakeholders and study how users describe the problem today"],
+        ["Align teams on shared terminology", "Lock in key terms before backend work begins, since that often precedes UI design"]
+      ],
+      Planning: [
+        ["Define the content strategy", "Translate research and requirements into a framework for the technical story"],
+        ["Refine information architecture and taxonomy", "Shape the structure, object models, and naming teams rely on downstream"]
+      ],
+      Design: [["Review designs with the design team", "Check understandability and adherence to defined terminology and hierarchy"]],
+      Development: [["Steward the strategy in build", "Keep implementation true to the intended structure and voice"]],
+      Testing: [
+        ["Review the implementation against the design", "Check design fidelity and spot content needs that surface in context"],
+        ["Partner with UX research on user testing", "Co-interpret findings to identify content improvements, when testing applies"]
+      ],
+      Delivery: [["Consolidate the team's follow-up items", "Gather and prioritize all content follow-ups into one backlog"]]
+    },
+    outputs: {
+      Discovery: [
+        ["Research synthesis & content audit", "Findings, gaps, and a shared definition of success"],
+        ["Shared terminology reference", "Agreed-upon key terms for every team to work from"]
+      ],
+      Planning: [["Content strategy & IA framework", "Messaging model and taxonomy"]],
+      Design: [["Review feedback & IA refinements", "Annotated flow comments plus terminology and hierarchy updates"]],
+      Development: [["Implementation guidance & review notes", "Clarifications, alignment checks, and content adjustments"]],
+      Testing: [["QA findings & revisions", "Design-fidelity gaps, added content needs, and research-informed fixes"]],
+      Delivery: [["Consolidated follow-up backlog", "All out-of-scope content items, prioritized for the next iteration"]]
+    },
+    value: {
+      Discovery: [["Sets the foundation every team builds on", "A shared understanding of the problem guides backend, frontend, and docs alike"]],
+      Planning: [["Turns the foundation into a working framework", "Strategy and IA become the structures teams act on"]],
+      Design: [["Keeps the experience anchored to strategy", "Catches drift in terminology or hierarchy before designs harden"]],
+      Development: [["Preserves intent as the product is built", "Code decisions stay true to the structure and voice defined upstream"]],
+      Testing: [["Verifies the experience holds up in reality", "Confirms the build carries the intended clarity and surfaces gaps before launch"]],
+      Delivery: [["The dividend of front-loaded strategy", "A smooth launch reflects the clarity and alignment set earlier"]]
+    },
+    skills: {
+      Discovery: [["stakeholder interviewing, research synthesis, cross-team facilitation, terminology mapping, user-perspective questioning", ""]],
+      Planning: [["information architecture, taxonomy design, systems thinking, work breakdown, technical storytelling", ""]],
+      Design: [["content design critique, plain-language judgment, design literacy, design partnership", ""]],
+      Development: [["specification, technical fluency, cross-functional communication", ""]],
+      Testing: [["design-fidelity review, gap identification, UX research collaboration", ""]],
+      Delivery: [["team coordination, backlog consolidation", ""]]
+    },
+    questions: {
+      Discovery: [["What problem are users trying to solve, and what language do they use for it?", ""]],
+      Planning: [["What's the technical story this product needs to tell, and how should the IA reflect it?", ""]],
+      Design: [["Will users move through this flow with understanding?", ""]],
+      Development: [["Is the build staying true to the structure and voice we defined?", ""]],
+      Testing: [["Does the built product carry the clarity we designed for?", ""]],
+      Delivery: [["Did the upstream work pay off, and what should the team carry forward?", ""]]
+    }
+  },
+  uxwriting: {
+    activities: {
+      Discovery: [], Planning: [],
+      Design: [
+        ["Write UI copy across screens and states", "Headings, buttons, labels, microcopy, plus error, empty, loading, and success states often missed in flat designs"],
+        ["Partner with designers in real-time", "Refine copy as designs evolve so words and visuals develop together"]
+      ],
+      Development: [["Address UI content gaps during build", "Handle content missing from the handoff or changes that surface in implementation"]],
+      Testing: [["QA and revise UI content in the build", "Check implemented copy against the source of truth, fix drift, and adjust for QA or user-testing findings"]],
+      Delivery: []
+    },
+    outputs: {
+      Discovery: [], Planning: [],
+      Design: [["UI copy and patterns", "Contextual language for every screen and state, plus reusable patterns for common moments"]],
+      Development: [["UI copy adjustments during build", "Resolved gaps and changes after handoff"]],
+      Testing: [["UI content QA findings and fixes", "Documented drift between intended and shipped copy, plus fixes"]],
+      Delivery: []
+    },
+    value: {
+      Discovery: [], Planning: [],
+      Design: [["Gives the interface its voice", "Every touchpoint becomes intentional and strategy-aligned"]],
+      Development: [["Keeps UI content sound under build pressure", "Adapts to what's built without losing design intent"]],
+      Testing: [["Refines UI content in the live product", "Catches and fixes errors, gaps, and missed opportunities"]],
+      Delivery: []
+    },
+    skills: {
+      Discovery: [], Planning: [],
+      Design: [["microcopy writing, plain-language judgment, voice and tone, design literacy, edge-case thinking, user enablement, user-perspective questioning", ""]],
+      Development: [["responsive writing, developer collaboration, quick decision-making", ""]],
+      Testing: [["UI content QA, attention to detail, UX research collaboration, usability & understandability assessment", ""]],
+      Delivery: []
+    },
+    questions: {
+      Discovery: [], Planning: [],
+      Design: [["Will users know what to do at every moment?", ""]],
+      Development: [["What UI content needs are emerging that weren't in the handoff?", ""]],
+      Testing: [["Does the UI content hold up in the live product?", ""]],
+      Delivery: []
+    }
+  },
+  docs: {
+    activities: {
+      Discovery: [],
+      Planning: [["Review use cases and doc requirements", "Learn how the feature will be used and what the docs must cover"]],
+      Design: [["Attend syncs and design feedback", "Stay close to product decisions and emerging content needs"]],
+      Development: [
+        ["Draft documentation with SMEs", "Translate complex concepts and workflows into clear, actionable content, anticipating points of confusion"],
+        ["Adapt the plan to scope changes", "Update as project details shift during development"]
+      ],
+      Testing: [["Run stakeholder reviews and revise", "Gather reviewer input, resolve open questions, and update the docs"]],
+      Delivery: [["Publish and announce", "Push docs to their published location and share the link"]]
+    },
+    outputs: {
+      Discovery: [],
+      Planning: [["Documentation plan and outline", "Scope drawn from strategy, tickets, and use cases"]],
+      Design: [["Open questions", "Issues from syncs needing answers before writing begins"]],
+      Development: [["Final documentation draft", "Overviews, task topics, and troubleshooting ready for review"]],
+      Testing: [["Reviewed documentation", "Refined on stakeholder feedback, ready to publish"]],
+      Delivery: [["Published documentation", "Live and accessible to users"]]
+    },
+    value: {
+      Discovery: [],
+      Planning: [["Turns intake into a focused plan", "Strategy, tickets, and use cases define a clear scope"]],
+      Design: [["Keeps docs grounded in current decisions", "Syncs surface details and changes docs must reflect"]],
+      Development: [["Translates SME knowledge into usable docs", "Curation with SMEs keeps content accurate and easy to follow"]],
+      Testing: [["Validates docs through review", "Feedback catches gaps and errors before publication"]],
+      Delivery: [["Delivers docs to users", "Publishing makes them accessible and discoverable"]]
+    },
+    skills: {
+      Discovery: [],
+      Planning: [["strategy review, use case analysis, documentation scoping, synthesis", ""]],
+      Design: [["active listening, design literacy, critical questioning, attention to detail", ""]],
+      Development: [["technical writing, SME collaboration, concept translation, user empathy, structured authoring, documentation structure & formatting, readability optimization, user-perspective questioning", ""]],
+      Testing: [["review facilitation, feedback synthesis, technical editing", ""]],
+      Delivery: [["publication, internal communication", ""]]
+    },
+    questions: {
+      Discovery: [],
+      Planning: [["What needs to be documented, and how?", ""]],
+      Design: [["What's emerging that documentation will need to reflect?", ""]],
+      Development: [["Will users understand and act with confidence?", ""]],
+      Testing: [["Is the documentation ready for users to rely on?", ""]],
+      Delivery: [["Is the documentation in users' hands and easy to find?", ""]]
+    }
+  },
+  apidocs: {
+    activities: {
+      Discovery: [],
+      Planning: [["Review use cases and API doc requirements", "Learn how developers will use the feature and what to cover"]],
+      Design: [["Review API spec updates", "Track spec changes and spot where content is needed or unclear"]],
+      Development: [
+        ["Write API content in the spec", "Request and parameter descriptions, examples, and structural guidance, written into the spec"],
+        ["Create developer guides", "Guidance for structuring requests, including multi-step workflows and complex cases"]
+      ],
+      Testing: [["Run reviews and revise", "Coordinate stakeholder reviews of the spec and guides, then incorporate feedback"]],
+      Delivery: [["Publish and announce", "Publish the spec and guides and share the link"]]
+    },
+    outputs: {
+      Discovery: [],
+      Planning: [["Scoped API doc plan", "Spec and guide updates needed for workflows and complex requests"]],
+      Design: [["Open questions for the SME", "Items to resolve before development begins"]],
+      Development: [["Updated spec and developer guides", "Spec with embedded content, plus task-oriented guides for complex workflows"]],
+      Testing: [["Final spec and guides", "Reviewer feedback incorporated, ready to publish"]],
+      Delivery: [["Published API documentation", "Spec and guides live for developers"]]
+    },
+    value: {
+      Discovery: [],
+      Planning: [["Frames docs around developer needs", "Use cases ensure docs reflect how developers work"]],
+      Design: [["Sets up efficient content development", "Resolving questions early means fewer blockers in the code"]],
+      Development: [["Pairs reference with task-level guidance", "The spec covers reference; guides cover complex workflows"]],
+      Testing: [["Validates the docs through review", "Feedback catches gaps in the spec and guides"]],
+      Delivery: [["Delivers docs to developers", "Spec and guides become accessible and discoverable"]]
+    },
+    skills: {
+      Discovery: [],
+      Planning: [["developer use case analysis, requirements review, API doc scoping", ""]],
+      Design: [["API spec literacy, critical questioning, attention to detail", ""]],
+      Development: [["technical writing, API spec literacy, code familiarity, example writing, OpenAPI specification, docs-as-code (version control), user-perspective questioning", ""]],
+      Testing: [["review facilitation, feedback synthesis, API content editing", ""]],
+      Delivery: [["publication, internal communication", ""]]
+    },
+    questions: {
+      Discovery: [],
+      Planning: [["What do developers need to know to use this API?", ""]],
+      Design: [["What needs clarification before development begins?", ""]],
+      Development: [["Can a developer use this API confidently?", ""]],
+      Testing: [["Is the API documentation ready to rely on?", ""]],
+      Delivery: [["Is the API documentation in developers' hands and easy to find?", ""]]
+    }
+  },
+  contentops: {
+    activities: {
+      Discovery: [],
+      Planning: [["Create and assign project tickets", "Build tickets with the scope, deliverables, SMEs, and context each assignee needs"]],
+      Design: [["Manage the project and unblock the team", "Track ticket progress, coordinate with PMs and stakeholders, and clear obstacles"]],
+      Development: [
+        ["Build in-product notifications and guides", "Implement notifications, tooltips, and walkthroughs with tools like WalkMe or Pendo"],
+        ["Ongoing project management and support", ""]
+      ],
+      Testing: [
+        ["Close out tasks and prep publishing", "Confirm deliverables are in; generate previews, prepare builds, and run accessibility tests"],
+        ["Ongoing project management and support", ""]
+      ],
+      Delivery: [["Coordinate launch and close out", "Run go-live, confirm everything shipped, resolve tickets, and archive the project"]]
+    },
+    outputs: {
+      Discovery: [],
+      Planning: [["Project tickets", "Organized intake with scope, deliverables, and SME contacts"]],
+      Design: [["Real-time project status", "Current tickets, progress, and blocker visibility"]],
+      Development: [["Implemented in-product guides", "Notifications, tooltips, and walkthroughs ready for testing"]],
+      Testing: [["Updated project tickets", "No new content deliverable here; tickets reflect closeout, publishing prep, and accessibility checks"]],
+      Delivery: [["Closed-out project record", "Tickets resolved or logged, deliverables live, project archived"]]
+    },
+    value: {
+      Discovery: [],
+      Planning: [["Turns strategy into actionable work", "Clear tickets give the team scope and context up front"]],
+      Design: [["Keeps the project moving", "Active tracking and unblocking prevent delays and surprises"]],
+      Development: [["Sustains momentum while shipping", "Operational support keeps work moving as guides are built"]],
+      Testing: [["Sets up a clean release", "Task closure and prep means no launch-day scramble"]],
+      Delivery: [["Brings the project to an orderly close", "A coordinated launch and clean closeout set up the next iteration"]]
+    },
+    skills: {
+      Discovery: [],
+      Planning: [["project management, work scoping, ticket writing, resource allocation", ""]],
+      Design: [["project management, stakeholder coordination, problem-solving, status tracking", ""]],
+      Development: [["project management, in-product content build, problem-solving", ""]],
+      Testing: [["project closeout, publishing prep, accessibility testing", ""]],
+      Delivery: [["launch coordination, project closeout, process documentation", ""]]
+    },
+    questions: {
+      Discovery: [],
+      Planning: [["Does each team member have what they need to start?", ""]],
+      Design: [["Is the team unblocked and on track?", ""]],
+      Development: [["Is everything tracking to plan?", ""]],
+      Testing: [["Is everything ready for release?", ""]],
+      Delivery: [["Did we ship cleanly, and what do we carry forward?", ""]]
+    }
+  }
+};
+
+const aiContent = {
+  strategy: {
+    focus: "Telling the technical story through every user-facing touchpoint so users feel smart, empowered, and confident, which means deeply understanding who they are, what they're trying to achieve, and the language they expect.",
+    cards: [
+      { ai: "Ask questions to build a fast, deep-enough grasp of unfamiliar concepts, and surface the industry-accepted terminology and trends users already associate with this kind of capability.", human: "Judging which framing actually fits these users and this product's story, not just what's conventional." },
+      { ai: "Test and compare language and phrasing options against common standards and current trends before committing to terms.", human: "Choosing wording that makes users feel confident and capable, and knowing when to break from convention on purpose." },
+      { ai: "Pressure-test and validate decisions around terminology, taxonomy, and information architecture.", human: "Owning the structure and defending it against the real mental model users bring to the product." }
+    ]
+  },
+  uxwriting: {
+    focus: "Delivering the necessary information clearly and concisely, exactly when and where it's needed.",
+    cards: [
+      { ai: "Get up to speed on technical concepts quickly to keep fast-moving copy decisions moving.", human: "Setting the bar for clarity and deciding what the user actually needs in this moment." },
+      { ai: "Generate and iterate on microcopy such as error messages, tooltips, and labels, against defined criteria.", human: "Defining the criteria and the voice, and judging fit in the real context of the screen." },
+      { ai: "Assess the content of a whole design at once to flag gaps, inconsistencies, and opportunities to improve.", human: "Deciding which flags matter and how to resolve them coherently." },
+      { ai: "Check copy against brand and design-system guidelines for consistency.", human: "Owning the guidelines, and the exceptions worth making." },
+      { ai: "Surface conventions and wholesale improvements that could apply across the product's UI content.", human: "Deciding what becomes a durable, product-wide convention versus a one-off." }
+    ]
+  },
+  docs: {
+    focus: "Translating complex capabilities into documentation users can act on with confidence, with AI useful at nearly every step of the work.",
+    cards: [
+      { ai: "Learn technical concepts deeply enough to translate them into documentation for users.", human: "Owning the translation, and the user's perspective the explanation has to serve." },
+      { ai: "Validate content structures and tables of contents, and review drafts for technical accuracy, consistency, completeness, and helpfulness against user personas and objectives.", human: "Supplying the persona and objective context, and making the final accuracy call." },
+      { ai: "Assess quality and accuracy across large doc sets and make improvements in bulk, far faster than reviewing manually.", human: "Setting the quality bar and spot-checking what ships at scale." },
+      { ai: "Generate example tables, diagrams, and layouts quickly, then refine them in dialogue when the right presentation isn't obvious.", human: "Choosing the form that communicates the information best." },
+      { ai: "Offer inspiration that surfaces best practices, engaging conventions, and layouts to apply across the doc set.", human: "Deciding what genuinely fits the product and the audience." },
+      { ai: "Consume well-structured documentation as a source. Chatbots, AI search, and other tools depend on it.", human: "Structuring docs to be AI-optimized so both machines and people can rely on them." }
+    ]
+  },
+  apidocs: {
+    focus: "Sharpening the spec and the guides developers rely on, with deliberate prompting and review at every turn, so updates stay accurate, context-aware, and product-specific without overwhelming dev teams or eroding the trust between content and engineering.",
+    cards: [
+      { ai: "Scan code to flag the editable text that will appear in the generated API spec.", human: "Deciding what needs writing, and why it matters to the developer." },
+      { ai: "Evaluate the whole spec or a subset to improve request titles, title and parameter descriptions, and examples for usability and understandability.", human: "Prompting deliberately and reviewing every change for accuracy." },
+      { ai: "Insert use-case details per endpoint and catch missing notes or warnings on parameters, request types, and endpoints.", human: "Confirming correctness and the product-specific nuance AI can't infer." },
+      { ai: "Generate developer guides that break down API workflows and concepts the endpoint index can't express on its own.", human: "Shaping the narrative around how developers actually build." },
+      { ai: "Compare API specification files to identify and summarize changes for release notes.", human: "Framing what matters, and pacing updates so they don't overwhelm or erode trust with engineering." }
+    ]
+  },
+  contentops: {
+    focus: "Reducing the manual overhead of tracking, communication, and coordination so the team can stay focused on the content itself.",
+    cards: [
+      { ai: "Refine backlog items and draft tickets from requirements and other human-provided inputs.", human: "Supplying the requirements and the priorities that give the work meaning." },
+      { ai: "Streamline project status tracking and adjust as things change through development.", human: "Interpreting what the changes mean for the plan and the team." },
+      { ai: "Assist with quality and accessibility assessments across deliverables.", human: "Setting the standard and owning the final pass." },
+      { ai: "Automate internal tracking and communication wherever it reduces manual effort.", human: "Choosing what's worth automating, and what isn't." },
+      { ai: "Generate meeting summaries that can be stored and used to inform content requirements and modifications.", human: "Turning captured context into actual decisions and follow-through." }
+    ]
+  }
+};
+
+const aiFrontier = {
+  eyebrow: "Looking ahead",
+  title: "How content work translates as AI matures",
+  intro: "Rapid AI maturity means a continuous shift in the way we work, the tools and processes we use, and the outcomes we deliver as technical content professionals. The job morphs into one focused less on the manual drafting and iterating of copy, and more on building a powerful partnership with AI, drawn from a deep, real understanding of the biggest pain points and opportunities in delivering high-quality content and content-led experiences.",
+  intro2: "AI is most valuable in the hands of someone who understands how to work with it to produce meaningful results. That takes a relentless curiosity and a creative approach to asking the questions that extract the right information. It takes constant adaptation to new ways of working, applying the skills refined through human experience. As products embed AI and rely on it to surface information, the people who know how to make content clear, trustworthy, and well-structured become essential to building those systems, not just using them. The areas below show how today's content skills translate into that future.",
+  items: [
+    { title: "Structuring content so AI can rely on it", text: "Designing content as explicit, well-structured, meaning-rich objects so AI search and assistants can use it as a trustworthy source, retrieving meaning rather than guessing at it. Structured formats like DITA do this today; approaches such as knowledge graphs and shared meaning models are emerging fast and worth watching.", from: "information architecture, taxonomy, terminology, and structured authoring" },
+    { title: "Designing how AI does the work", text: "Translating editorial judgment and process logic into how AI workflows behave: where automation runs on its own, where a person steps in, and what \u201Cgood enough to proceed\u201D looks like at each checkpoint.", from: "content operations, project management, and editorial judgment" },
+    { title: "Governing quality and trust", text: "Defining and enforcing what correctness means for content AI generates at scale: accuracy, consistency, clear source attribution, and the trust that lets people depend on the output. This includes evaluating what AI produces, not only reviewing what people write.", from: "review, QA, editing, and accuracy judgment" },
+    { title: "Shaping the product's AI voice", text: "Defining how in-product AI sounds and how AI-generated prompts are phrased, so the product's assistant speaks with the same clarity, tone, and care as the rest of the experience.", from: "UI/UX writing, voice and tone, and content design" }
+  ],
+  close: "The throughline is the same as everywhere else on this page: AI accelerates the work, and content experts make it trustworthy. That pairing is what makes them partners in building AI, not just users of it."
+};
+
+const ICON = {
+  chevron: '<svg class="exp-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg>',
+  refresh: '<svg class="ghost-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/></svg>',
+  arrows: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l4 -4l4 4"/><path d="M8 17l4 4l4 -4"/><path d="M12 3v18"/></svg>',
+  doc: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/></svg>',
+  down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l0 14"/><path d="M16 15l-4 4l-4 -4"/></svg>',
+  tool: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/></svg>',
+  users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6 5.6 1.9 -5.6 1.9 -1.9 5.6 -1.9 -5.6 -5.6 -1.9 5.6 -1.9z"/><path d="M19 4v3"/><path d="M20.5 5.5h-3"/></svg>',
+  person: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 11m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M6 21v-1a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v1"/></svg>'
+};
+
+const active = new Set(disciplines.map(d => d.key));
+let allExpanded = false;
+
+function switchView(v) {
+  document.querySelectorAll(".tab").forEach(t => {
+    const on = t.dataset.view === v;
+    t.classList.toggle("active", on);
+    t.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  document.getElementById("view-matrix").hidden = v !== "matrix";
+  document.getElementById("view-deliverables").hidden = v !== "deliverables";
+  document.getElementById("view-skills").hidden = v !== "skills";
+  document.getElementById("view-ai").hidden = v !== "ai";
+  if (v === "deliverables") renderDeliv();
+  if (v === "skills") renderSkills();
+  if (v === "ai") renderAi();
+}
+
+function renderLegend() {
+  const el = document.getElementById("legend");
+  el.innerHTML = "";
+  disciplines.forEach(d => {
+    const on = active.has(d.key);
+    const btn = document.createElement("button");
+    btn.className = "legend-btn";
+    btn.style.background = on ? d.fill : "transparent";
+    btn.style.color = on ? d.text : "var(--color-text-tertiary)";
+    btn.style.opacity = on ? "1" : "0.6";
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.innerHTML = '<span class="legend-swatch" style="background:' + (on ? d.hex : "var(--color-border-secondary)") + '"></span>' + d.label;
+    btn.onclick = () => { on ? active.delete(d.key) : active.add(d.key); renderLegend(); renderBody(); };
+    el.appendChild(btn);
+  });
+}
+
+function renderHead() {
+  const head = document.getElementById("matrix-head");
+  let row = '<tr><th class="corner"></th>';
+  stages.forEach((s, i) => {
+    row += '<th class="stage"><div class="stage-num">0' + (i + 1) + '</div><div class="stage-name">' + s + '</div></th>';
+  });
+  head.innerHTML = row + "</tr>";
+}
+
+function activityBox(d, summary, context) {
+  if (context) {
+    return '<div class="exp-box" onclick="toggleBox(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();toggleBox(this);}" role="button" tabindex="0" aria-expanded="false" style="background:' + d.fill + '">' +
+      '<div class="exp-row">' +
+        '<span class="exp-summary" style="color:' + d.text + '">' + summary + '</span>' +
+        '<span style="color:' + d.sub + ';display:flex">' + ICON.chevron + '</span>' +
+      '</div>' +
+      '<div class="exp-desc" style="color:' + d.sub + '">' + context + '</div>' +
+    '</div>';
+  }
+  return '<div class="ghost-box" style="border-color:' + d.sub + '">' +
+    '<div class="ghost-row" style="color:' + d.sub + '">' + ICON.refresh +
+      '<span class="ghost-text" style="color:' + d.text + '">' + summary + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function skillChips(d, listStr) {
+  const chips = listStr.split(", ").map(s =>
+    '<span class="chip" style="background:' + d.fill + ';color:' + d.text + '">' + s + '</span>'
+  ).join("");
+  return '<div class="chip-group">' + chips + '</div>';
+}
+
+function questionBox(d, q) {
+  return '<div class="q-box" style="border-color:' + d.hex + '"><span class="q-text" style="color:' + d.hex + '">' + q + '</span></div>';
+}
+
+function renderBody() {
+  const body = document.getElementById("matrix-body");
+  body.innerHTML = "";
+  dimensions.forEach(dim => {
+    let row = '<tr><td class="rowhead"><div class="dim-label">' + dim.label + '</div><div class="dim-hint">' + dim.hint + '</div></td>';
+    stages.forEach(stage => {
+      let cell = '<td class="cell">';
+      const shown = disciplines.filter(d => active.has(d.key));
+      if (shown.length === 0) {
+        cell += '<div class="empty-dash">&mdash;</div>';
+      } else {
+        shown.forEach(d => {
+          const data = content[d.key] && content[d.key][dim.key] && content[d.key][dim.key][stage];
+          if (!Array.isArray(data) || data.length === 0) return;
+          if (dim.key === "skills") {
+            cell += skillChips(d, data[0][0]);
+          } else if (dim.key === "questions") {
+            cell += questionBox(d, data[0][0]);
+          } else if (dim.key === "activities") {
+            let group = "";
+            data.forEach(item => { group += activityBox(d, item[0], item[1] || ""); });
+            if (aiStages[d.key] && aiStages[d.key].includes(stage)) {
+              cell += '<div class="ai-cellwrap">' + group +
+                '<button class="ai-corner" style="color:' + d.sub + '" onclick="goToAi(\'' + d.key + '\')" title="AI can assist with this work. Opens the Working with AI tab." aria-label="AI-assisted activity">' + ICON.spark + '</button></div>';
+            } else {
+              cell += group;
+            }
+          } else {
+            data.forEach(item => { cell += activityBox(d, item[0], item[1] || ""); });
+          }
+        });
+      }
+      cell += "</td>";
+      row += cell;
+    });
+    body.innerHTML += row + "</tr>";
+  });
+  applyExpandState();
+}
+
+function toggleBox(el) {
+  const desc = el.querySelector(".exp-desc");
+  const chev = el.querySelector(".exp-chevron");
+  const open = desc.style.display !== "none" && desc.style.display !== "";
+  desc.style.display = open ? "none" : "block";
+  if (chev) chev.style.transform = open ? "rotate(0deg)" : "rotate(180deg)";
+  el.setAttribute("aria-expanded", open ? "false" : "true");
+}
+
+function applyExpandState() {
+  document.querySelectorAll("#matrix-body .exp-box").forEach(box => {
+    const desc = box.querySelector(".exp-desc");
+    const chev = box.querySelector(".exp-chevron");
+    desc.style.display = allExpanded ? "block" : "none";
+    if (chev) chev.style.transform = allExpanded ? "rotate(180deg)" : "rotate(0deg)";
+    box.setAttribute("aria-expanded", allExpanded ? "true" : "false");
+  });
+}
+
+function setToggleLabel() {
+  const b = document.getElementById("toggleAll");
+  b.innerHTML = ICON.arrows + (allExpanded ? "Collapse all" : "Expand all");
+}
+
+function toggleAll() {
+  allExpanded = !allExpanded;
+  applyExpandState();
+  setToggleLabel();
+}
+
+let delivDiscipline = "strategy";
+
+const delivCatalog = {
+  strategy: ["Content strategy and requirements", "Authoring guidelines", "Technical story / messaging", "Terminology reference", "Information architecture diagrams", "UX guidance"],
+  uxwriting: ["General UI content (buttons, field labels, page titles, etc.)", "In-product announcements, tours, and tutorials", "Contextual help (tooltips, examples, descriptions)", "Error prevention and messages", "UI content guidelines and patterns"],
+  docs: ["Installation / getting started guides", "Technical overviews", "Use case guides", "Task-based workflow docs", "Release notes", "Documentation structure", "Troubleshooting guides", "Reference guides", "Technical diagrams"],
+  apidocs: ["API spec details (request titles and descriptions, parameter descriptions)", "Examples", "Categorization / tagging structure", "Developer guides (API workflows)", "API changelog"],
+  contentops: ["Project tracking tickets", "Doc metadata for SEO, AIO"]
+};
+
+let delivSlices = [];
+let hoveredDelivIndex = -1;
+
+function lightenHex(hex, f) {
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  r = Math.round(r + (255 - r) * f);
+  g = Math.round(g + (255 - g) * f);
+  b = Math.round(b + (255 - b) * f);
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function polar(cx, cy, r, deg) {
+  const a = (deg - 90) * Math.PI / 180;
+  return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+}
+
+function donutPath(cx, cy, rO, rI, a0, a1) {
+  const p1 = polar(cx, cy, rO, a0), p2 = polar(cx, cy, rO, a1);
+  const p3 = polar(cx, cy, rI, a1), p4 = polar(cx, cy, rI, a0);
+  const large = (a1 - a0) > 180 ? 1 : 0;
+  return "M " + p1.x.toFixed(2) + " " + p1.y.toFixed(2) +
+    " A " + rO + " " + rO + " 0 " + large + " 1 " + p2.x.toFixed(2) + " " + p2.y.toFixed(2) +
+    " L " + p3.x.toFixed(2) + " " + p3.y.toFixed(2) +
+    " A " + rI + " " + rI + " 0 " + large + " 0 " + p4.x.toFixed(2) + " " + p4.y.toFixed(2) + " Z";
+}
+
+function buildDelivSlices() {
+  delivSlices = [];
+  let total = 0;
+  disciplines.forEach(d => { total += (delivCatalog[d.key] || []).length; });
+  const per = 360 / total;
+  let ang = 0;
+  disciplines.forEach(d => {
+    const items = delivCatalog[d.key] || [];
+    items.forEach((name, i) => {
+      const f = items.length > 1 ? (i / (items.length - 1)) * 0.46 : 0.16;
+      delivSlices.push({
+        discipline: d.key, label: d.label, hex: d.hex,
+        name: name, color: lightenHex(d.hex, f),
+        a0: ang, a1: ang + per
+      });
+      ang += per;
+    });
+  });
+}
+
+function renderDelivChart() {
+  if (!delivSlices.length) buildDelivSlices();
+  const svg = document.getElementById("deliv-chart-svg");
+  let paths = "";
+  delivSlices.forEach((s, i) => {
+    paths += '<path d="' + donutPath(100, 100, 92, 56, s.a0, s.a1) + '" fill="' + s.color +
+      '" stroke="#F6F5F2" stroke-width="1.2" style="cursor:pointer;transition:opacity 0.15s" ' +
+      'onmouseenter="hoverDeliv(' + i + ')" onmouseleave="hoverDeliv(-1)" ' +
+      'onclick="selectDelivFromChart(\'' + s.discipline + '\')"></path>';
+  });
+  svg.innerHTML = paths;
+  applyChartState();
+}
+
+function applyChartState() {
+  const svg = document.getElementById("deliv-chart-svg");
+  if (!svg) return;
+  const paths = svg.querySelectorAll("path");
+  paths.forEach((p, i) => {
+    const s = delivSlices[i];
+    let op;
+    if (hoveredDelivIndex >= 0) {
+      op = i === hoveredDelivIndex ? 1 : 0.16;
+    } else {
+      op = s.discipline === delivDiscipline ? 1 : 0.4;
+    }
+    p.style.opacity = op;
+  });
+  const d = disciplines.find(x => x.key === delivDiscipline);
+  const n = (delivCatalog[d.key] || []).length;
+  const center = document.getElementById("chart-center");
+  if (center) center.innerHTML = '<div class="cc-num" style="color:' + d.hex + '">' + n + '</div><div class="cc-label">' + d.label + '</div>';
+  const cap = document.getElementById("chart-caption");
+  if (cap) {
+    if (hoveredDelivIndex >= 0) {
+      const s = delivSlices[hoveredDelivIndex];
+      cap.innerHTML = '<b>' + s.name + '</b><span class="cap-disc" style="color:' + s.hex + '">' + s.label + '</span>';
+    } else {
+      cap.innerHTML = '<span style="color:var(--color-text-tertiary)">Hover a slice or name to highlight it</span>';
+    }
+  }
+  delivSlices.forEach((s, i) => {
+    const li = document.getElementById("leg-" + i);
+    if (!li) return;
+    li.classList.remove("dim", "hot");
+    if (hoveredDelivIndex >= 0) {
+      if (i === hoveredDelivIndex) li.classList.add("hot");
+      else li.classList.add("dim");
+    } else if (s.discipline !== delivDiscipline) {
+      li.classList.add("dim");
+    }
+  });
+}
+
+function renderDelivLegend() {
+  const el = document.getElementById("deliv-legend");
+  if (!el) return;
+  if (!delivSlices.length) buildDelivSlices();
+  let html = "";
+  disciplines.forEach(d => {
+    const items = delivSlices.filter(s => s.discipline === d.key);
+    if (!items.length) return;
+    html += '<div class="leg-group">' +
+      '<div class="leg-group-title" style="color:' + d.text + '"><span class="leg-dot" style="background:' + d.hex + '"></span>' + d.label + '</div>';
+    items.forEach(s => {
+      const i = delivSlices.indexOf(s);
+      html += '<div class="leg-item" id="leg-' + i + '" onmouseenter="hoverDeliv(' + i + ')" onmouseleave="hoverDeliv(-1)" onclick="selectDelivFromChart(\'' + d.key + '\')">' +
+        '<span class="leg-dot" style="background:' + s.color + '"></span><span>' + s.name + '</span></div>';
+    });
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function hoverDeliv(i) {
+  hoveredDelivIndex = i;
+  applyChartState();
+}
+
+function selectDelivFromChart(key) {
+  delivDiscipline = key;
+  hoveredDelivIndex = -1;
+  renderDelivPills();
+  renderTimeline();
+  applyChartState();
+}
+
+function renderDelivPills() {
+  const el = document.getElementById("deliv-pills");
+  el.innerHTML = "";
+  disciplines.forEach(d => {
+    const on = d.key === delivDiscipline;
+    const btn = document.createElement("button");
+    btn.className = "legend-btn";
+    btn.style.background = on ? d.fill : "transparent";
+    btn.style.color = on ? d.text : "var(--color-text-tertiary)";
+    btn.style.borderColor = on ? d.hex : "var(--color-border-secondary)";
+    btn.style.opacity = on ? "1" : "0.7";
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.innerHTML = '<span class="legend-swatch" style="background:' + (on ? d.hex : "var(--color-border-secondary)") + '"></span>' + d.label;
+    btn.onclick = () => { delivDiscipline = d.key; hoveredDelivIndex = -1; renderDelivPills(); renderTimeline(); applyChartState(); };
+    el.appendChild(btn);
+  });
+}
+
+function renderTimeline() {
+  const d = disciplines.find(x => x.key === delivDiscipline);
+  const tl = document.getElementById("deliv-timeline");
+  tl.style.setProperty("--accent", d.hex);
+  tl.style.setProperty("--accent-soft", d.fill);
+  tl.innerHTML = "";
+
+  const activeStages = stages.filter(s => {
+    const o = content[d.key].outputs[s];
+    return Array.isArray(o) && o.length > 0;
+  });
+
+  let count = 0;
+  activeStages.forEach(s => { count += content[d.key].outputs[s].length; });
+
+  const stat = document.getElementById("deliv-stat");
+  stat.innerHTML = '<b>' + count + ' deliverable' + (count === 1 ? '' : 's') + '</b> across <b>' +
+    activeStages.length + ' stage' + (activeStages.length === 1 ? '' : 's') + '</b> &mdash; each one an answer to a guiding question.';
+
+  activeStages.forEach((s, idx) => {
+    const stageIdx = stages.indexOf(s);
+    const q = (content[d.key].questions[s] && content[d.key].questions[s][0]) ? content[d.key].questions[s][0][0] : "";
+    const outs = content[d.key].outputs[s];
+
+    let cards = "";
+    outs.forEach(o => {
+      cards += '<div class="deliverable-card">' +
+        '<span class="dc-icon" style="color:' + d.sub + '">' + ICON.doc + '</span>' +
+        '<div>' +
+          '<div class="dc-title" style="color:' + d.text + '">' + o[0] + '</div>' +
+          (o[1] ? '<div class="dc-desc">' + o[1] + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    });
+
+    const node = document.createElement("div");
+    node.className = "tl-node reveal";
+    node.style.animationDelay = (idx * 0.07) + "s";
+    node.innerHTML =
+      '<div class="tl-rail"><span class="tl-dot"></span></div>' +
+      '<div class="tl-content">' +
+        '<div class="tl-stage"><span class="tl-stage-num">0' + (stageIdx + 1) + '</span><span class="tl-stage-name">' + s + '</span></div>' +
+        (q ? '<div class="tl-ask"><span class="tl-micro">The question that guides us</span><p class="tl-question">' + q + '</p></div>' : '') +
+        '<div class="tl-connector">' + ICON.down + 'produces</div>' +
+        '<div class="tl-delivers"><span class="tl-micro">What we deliver</span>' + cards + '</div>' +
+      '</div>';
+    tl.appendChild(node);
+  });
+}
+
+function renderDeliv() {
+  renderDelivPills();
+  renderTimeline();
+  renderDelivChart();
+  renderDelivLegend();
+  applyChartState();
+}
+
+const SKILL_TAXONOMY = [
+  {
+    group: "hard", label: "Hard skills", icon: ICON.tool, iconBg: "#E7EAEE", iconColor: "#3A4654",
+    blurb: "Teachable, domain-specific craft \u2014 the techniques, tools, and technical fluency the work is built on.",
+    clusters: [
+      { name: "Content craft & writing", skills: ["microcopy writing", "voice and tone", "responsive writing", "technical writing", "concept translation", "example writing", "technical editing", "API content editing", "specification", "ticket writing", "content design critique", "technical storytelling", "user enablement", "documentation structure & formatting", "readability optimization"] },
+      { name: "Information architecture & taxonomy", skills: ["information architecture", "taxonomy design", "terminology mapping"] },
+      { name: "Technical & domain fluency", skills: ["technical fluency", "structured authoring", "API spec literacy", "OpenAPI specification", "code familiarity", "docs-as-code (version control)", "in-product content build", "design literacy"] },
+      { name: "Research & analysis", skills: ["research synthesis", "use case analysis", "developer use case analysis", "requirements review", "strategy review", "synthesis", "feedback synthesis"] },
+      { name: "QA, testing & review", skills: ["design-fidelity review", "UI content QA", "usability & understandability assessment", "accessibility testing"] },
+      { name: "Process & project management", skills: ["project management", "documentation scoping", "API doc scoping", "work breakdown", "work scoping", "resource allocation", "status tracking", "backlog consolidation", "project closeout", "publishing prep", "publication", "launch coordination", "process documentation"] }
+    ]
+  },
+  {
+    group: "soft", label: "Soft skills", icon: ICON.users, iconBg: "#F6EAE2", iconColor: "#8A5A3C",
+    blurb: "The human and cognitive capabilities \u2014 how the work gets aligned, questioned, and carried across teams.",
+    clusters: [
+      { name: "Collaboration & communication", skills: ["stakeholder interviewing", "cross-team facilitation", "design partnership", "cross-functional communication", "UX research collaboration", "developer collaboration", "SME collaboration", "stakeholder coordination", "review facilitation", "team coordination", "active listening", "internal communication", "user empathy"] },
+      { name: "Critical thinking & judgment", skills: ["systems thinking", "user-perspective questioning", "plain-language judgment", "gap identification", "edge-case thinking", "critical questioning", "problem-solving", "quick decision-making", "attention to detail"] }
+    ]
+  }
+];
+
+let skillFilter = "all";
+let skillMembership = {};
+
+function buildSkillMembership() {
+  const m = {};
+  disciplines.forEach(d => {
+    stages.forEach(s => {
+      const arr = content[d.key].skills[s];
+      if (Array.isArray(arr) && arr.length && arr[0][0]) {
+        arr[0][0].split(", ").forEach(skill => {
+          if (!m[skill]) m[skill] = [];
+          if (!m[skill].includes(d.key)) m[skill].push(d.key);
+        });
+      }
+    });
+  });
+  Object.keys(m).forEach(k => {
+    m[k] = disciplines.filter(d => m[k].includes(d.key)).map(d => d.key);
+  });
+  return m;
+}
+
+function renderSkillFilter() {
+  const el = document.getElementById("skill-filter");
+  el.innerHTML = "";
+  const opts = [{ key: "all", label: "All disciplines", hex: "#211D18", fill: "#EAE7E1", text: "#211D18" }].concat(disciplines);
+  opts.forEach(o => {
+    const on = skillFilter === o.key;
+    const btn = document.createElement("button");
+    btn.className = "legend-btn";
+    btn.style.background = on ? o.fill : "transparent";
+    btn.style.color = on ? (o.text || o.hex) : "var(--color-text-tertiary)";
+    btn.style.borderColor = on ? o.hex : "var(--color-border-secondary)";
+    btn.style.opacity = on ? "1" : "0.7";
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    const sw = o.key === "all" ? "" : '<span class="legend-swatch" style="background:' + (on ? o.hex : "var(--color-border-secondary)") + '"></span>';
+    btn.innerHTML = sw + o.label;
+    btn.onclick = () => { skillFilter = o.key; renderSkillFilter(); renderSkills(); };
+    el.appendChild(btn);
+  });
+}
+
+function dotsHtml(members) {
+  return '<span class="dots">' + members.map(k => {
+    const d = disciplines.find(x => x.key === k);
+    return '<span class="dot" style="background:' + d.hex + '" title="' + d.label + '"></span>';
+  }).join("") + "</span>";
+}
+
+function chipHtml(skill) {
+  const members = skillMembership[skill] || [];
+  let style = "", cls = "skill-chip";
+  if (skillFilter !== "all") {
+    if (members.includes(skillFilter)) {
+      const d = disciplines.find(x => x.key === skillFilter);
+      style = "background:" + d.fill + ";border-color:" + d.hex + ";color:" + d.text + ";";
+    } else {
+      cls += " dim";
+    }
+  }
+  return '<span class="' + cls + '" style="' + style + '">' + skill + dotsHtml(members) + "</span>";
+}
+
+function renderSkills() {
+  if (!Object.keys(skillMembership).length) skillMembership = buildSkillMembership();
+  const wrap = document.getElementById("skill-panels");
+  wrap.innerHTML = "";
+  SKILL_TAXONOMY.forEach((panel, pi) => {
+    const total = panel.clusters.reduce((a, c) => a + c.skills.length, 0);
+    let clustersHtml = "";
+    panel.clusters.forEach(c => {
+      clustersHtml += '<div class="cluster"><div class="cluster-label">' + c.name + '</div><div class="chips">' +
+        c.skills.map(chipHtml).join("") + "</div></div>";
+    });
+    const div = document.createElement("div");
+    div.className = "skill-panel reveal";
+    div.style.animationDelay = (pi * 0.08) + "s";
+    div.innerHTML =
+      '<div class="sp-head">' +
+        '<span class="sp-icon" style="background:' + panel.iconBg + ';color:' + panel.iconColor + '">' + panel.icon + '</span>' +
+        '<div><div class="sp-title">' + panel.label + '</div><div class="sp-count">' + total + ' capabilities</div></div>' +
+      '</div>' +
+      '<p class="sp-blurb">' + panel.blurb + '</p>' +
+      clustersHtml;
+    wrap.appendChild(div);
+  });
+}
+
+function initSkillStat() {
+  const totalUnique = Object.keys(skillMembership).length;
+  const hardCount = SKILL_TAXONOMY[0].clusters.reduce((a, c) => a + c.skills.length, 0);
+  const softCount = SKILL_TAXONOMY[1].clusters.reduce((a, c) => a + c.skills.length, 0);
+  document.getElementById("skill-stat").innerHTML =
+    '<b>' + totalUnique + ' distinct capabilities</b> &mdash; ' + hardCount + ' hard, ' + softCount +
+    ' soft. The dots on each chip mark the disciplines that draw on it; select a discipline to see its skill fingerprint.';
+}
+
+let aiDiscipline = "strategy";
+
+function renderAiPills() {
+  const el = document.getElementById("ai-pills");
+  el.innerHTML = "";
+  disciplines.forEach(d => {
+    const on = d.key === aiDiscipline;
+    const btn = document.createElement("button");
+    btn.className = "legend-btn";
+    btn.style.background = on ? d.fill : "transparent";
+    btn.style.color = on ? d.text : "var(--color-text-tertiary)";
+    btn.style.borderColor = on ? d.hex : "var(--color-border-secondary)";
+    btn.style.opacity = on ? "1" : "0.7";
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.innerHTML = '<span class="legend-swatch" style="background:' + (on ? d.hex : "var(--color-border-secondary)") + '"></span>' + d.label;
+    btn.onclick = () => { aiDiscipline = d.key; renderAiPills(); renderAiCards(); };
+    el.appendChild(btn);
+  });
+}
+
+function renderAiCards() {
+  const d = disciplines.find(x => x.key === aiDiscipline);
+  const data = aiContent[d.key];
+
+  const focus = document.getElementById("ai-focus");
+  focus.style.color = d.hex;
+  focus.textContent = data.focus;
+
+  const wrap = document.getElementById("ai-cards");
+  wrap.innerHTML = "";
+  data.cards.forEach((c, i) => {
+    const card = document.createElement("div");
+    card.className = "ai-card reveal";
+    card.style.borderColor = d.fill;
+    card.style.animationDelay = (i * 0.05) + "s";
+    card.innerHTML =
+      '<div class="ai-card-ai">' +
+        '<div class="ai-mini" style="color:' + d.sub + '">' + ICON.spark + 'AI assists</div>' +
+        '<div class="ai-text">' + c.ai + '</div>' +
+      '</div>' +
+      '<div class="ai-card-human" style="background:' + d.fill + '">' +
+        '<div class="ai-mini" style="color:' + d.text + '">' + ICON.person + 'What the practitioner brings</div>' +
+        '<div class="ai-text" style="color:' + d.text + '">' + c.human + '</div>' +
+      '</div>';
+    wrap.appendChild(card);
+  });
+}
+
+function renderAiFrontier() {
+  const el = document.getElementById("ai-frontier");
+  let items = "";
+  aiFrontier.items.forEach(it => {
+    items += '<div class="frontier-item">' +
+      '<div class="fi-title">' + it.title + '</div>' +
+      '<div class="fi-text">' + it.text + '</div>' +
+      (it.from ? '<div class="fi-from">Grows from <b>' + it.from + '</b></div>' : '') +
+      '</div>';
+  });
+  el.innerHTML =
+    '<div class="frontier-eyebrow">' + ICON.spark + aiFrontier.eyebrow + '</div>' +
+    '<h2 class="frontier-title">' + aiFrontier.title + '</h2>' +
+    '<p class="frontier-intro">' + aiFrontier.intro + '</p>' +
+    (aiFrontier.intro2 ? '<p class="frontier-intro">' + aiFrontier.intro2 + '</p>' : '') +
+    '<div class="frontier-items">' + items + '</div>' +
+    '<p class="frontier-close">' + aiFrontier.close + '</p>';
+}
+
+function renderAi() {
+  renderAiPills();
+  renderAiCards();
+  renderAiFrontier();
+}
+
+function goToAi(key) {
+  aiDiscipline = key;
+  switchView('ai');
+}
+
+const aiStages = {
+  strategy: ["Discovery", "Planning"],
+  uxwriting: ["Design", "Development", "Testing"],
+  docs: ["Planning", "Development", "Testing", "Delivery"],
+  apidocs: ["Development", "Testing", "Delivery"],
+  contentops: ["Planning", "Design", "Testing", "Delivery"]
+};
+
+renderLegend();
+renderHead();
+renderBody();
+setToggleLabel();
+skillMembership = buildSkillMembership();
+renderSkillFilter();
+initSkillStat();
+</script>
+</body>
+</html>
